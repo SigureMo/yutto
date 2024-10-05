@@ -66,6 +66,7 @@ clean-builds:
   rm -rf dist/
   rm -rf yutto.egg-info/
 
+# CI specific
 ci-install:
   uv sync --all-extras --dev
 
@@ -81,6 +82,7 @@ ci-test:
 ci-e2e-test:
   uv run pytest -m "e2e and not (ci_skip or ignore)"
 
+# docker specific
 docker-run *ARGS:
   docker run --rm -it -v `pwd`:/app {{DOCKER_NAME}} {{ARGS}}
 
@@ -89,6 +91,13 @@ docker-build:
 
 docker-publish:
   docker buildx build --no-cache --platform=linux/amd64,linux/arm64 -t "{{DOCKER_NAME}}:{{VERSION}}" -t "{{DOCKER_NAME}}:latest" . --push
+
+# docs specific
+docs-dev:
+  cd docs; pnpm dev
+
+docs-build:
+  cd docs; pnpm build
 
 # biliass specific
 build-biliass:
